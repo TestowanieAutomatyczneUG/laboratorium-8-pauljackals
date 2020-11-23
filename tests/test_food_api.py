@@ -10,6 +10,14 @@ class FoodApiTest(unittest.TestCase):
         response = self.api.get_meals_by_name('Arrabiata')
         self.assertEqual(response['meals'][0]['idMeal'], '52771')
 
+    def test_get_meals_by_name_wrong_type(self):
+        with self.assertRaises(TypeError):
+            self.api.get_meals_by_name(5435)
+
+    def test_get_meals_by_name_none(self):
+        response = self.api.get_meals_by_name('fefewfwff')
+        self.assertEqual(response['meals'], None)
+
     def test_get_meals_by_first_letter(self):
         response = self.api.get_meals_by_first_letter('a')
         meal_names = []
@@ -17,9 +25,25 @@ class FoodApiTest(unittest.TestCase):
             meal_names.append(meal['strMeal'])
         self.assertCountEqual(meal_names, ['Apple & Blackberry Crumble', 'Apple Frangipan Tart'])
 
+    def test_get_meals_by_first_letter_wrong_type(self):
+        with self.assertRaises(TypeError):
+            self.api.get_meals_by_first_letter(678)
+
+    def test_get_meals_by_first_letter_none(self):
+        response = self.api.get_meals_by_first_letter('9')
+        self.assertEqual(response['meals'], None)
+
     def test_get_meal_by_id(self):
         response = self.api.get_meal_by_id(52772)
         self.assertEqual(response['meals'][0]['strMeal'], 'Teriyaki Chicken Casserole')
+
+    def test_get_meal_by_id_wrong_type(self):
+        with self.assertRaises(TypeError):
+            self.api.get_meal_by_id([])
+
+    def test_get_meal_by_id_none(self):
+        response = self.api.get_meal_by_id('9999999')
+        self.assertEqual(response['meals'], None)
 
     def test_get_random_meal(self):
         response = self.api.get_random_meal()
@@ -81,6 +105,14 @@ class FoodApiTest(unittest.TestCase):
             '52933'
         ])
 
+    def test_get_filter_meals_by_ingredient_wrong_type(self):
+        with self.assertRaises(TypeError):
+            self.api.get_filter_meals_by_ingredient(-65)
+
+    def test_get_filter_meals_by_ingredient_none(self):
+        response = self.api.get_filter_meals_by_ingredient('bing')
+        self.assertEqual(response['meals'], None)
+
     def test_get_filter_meals_by_category(self):
         response = self.api.get_filter_meals_by_category('Seafood')
         meal_id = ''
@@ -90,9 +122,25 @@ class FoodApiTest(unittest.TestCase):
                 break
         self.assertEqual(meal_id, '52836')
 
+    def test_get_filter_meals_by_category_wrong_type(self):
+        with self.assertRaises(TypeError):
+            self.api.get_filter_meals_by_category(-65)
+
+    def test_get_filter_meals_by_category_none(self):
+        response = self.api.get_filter_meals_by_category('test')
+        self.assertEqual(response['meals'], None)
+
     def test_get_filter_meals_by_area(self):
         response = self.api.get_filter_meals_by_area('Canadian')
         self.assertEqual(len(response['meals']), 13)
+
+    def test_get_filter_meals_by_area_wrong_type(self):
+        with self.assertRaises(TypeError):
+            self.api.get_filter_meals_by_area(-65)
+
+    def test_get_filter_meals_by_area_none(self):
+        response = self.api.get_filter_meals_by_area('pong')
+        self.assertEqual(response['meals'], None)
 
     def tearDown(self):
         self.api = None
